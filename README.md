@@ -18,3 +18,5 @@ Run the application:
 	./go-modular
 
 	```
+3. Open browser and type: http://localhost:9002
+
