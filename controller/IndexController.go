@@ -9,5 +9,3 @@ type IndexController struct {
 func (ctrl *IndexController) IndexAction(res http.ResponseWriter, req *http.Request) {
 	ctrl.Render(res, "index.html")
 }
-
-
