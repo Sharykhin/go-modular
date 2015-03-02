@@ -1,7 +1,7 @@
 package admin
 
 import "net/http"
-import controller "go-modular/controller"
+import controller "go-modular/application/controller"
 
 type DefaultController struct {
 	controller.BaseController
