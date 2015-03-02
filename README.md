@@ -5,9 +5,8 @@ Compile a project:
 2. Run the command:
 	```
 	go build
-
 	```
-
+ 
 There will be file "go-modular"
 
 Run the application:
@@ -17,5 +16,5 @@ Run the application:
 2. Run the command:
 	```
 	./go-modular
-	
+
 	```
