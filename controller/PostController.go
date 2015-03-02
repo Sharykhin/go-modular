@@ -8,11 +8,10 @@ type PostController struct {
 
 
 func (ctrl *PostController) AboutAction(res http.ResponseWriter, req *http.Request) {
-	//ctrl.RenderView("other.html")
-	ctrl.Render(res,"post.html")
+	ctrl.RenderView(res,"other")	
 }
 
 func (ctrl *PostController) IndexAction(res http.ResponseWriter, req *http.Request) {
-	ctrl.Render(res,"post.html")
+	ctrl.Render(res,"post")
 }
 
