@@ -1,17 +1,22 @@
 package main
 
 import (
-	"net/http"	
+	"net/http"
+	"strings"	
 	routers "go-modular/application/config/routers"
+	config "go-modular/application/config"
 	//"fmt"
 )
 
 func main() {
-	
+
 	// Handle static files such as styles and scripts
-	http.Handle("/public/vendor/",http.StripPrefix("/public/vendor/",http.FileServer(http.Dir("public/vendor"))))
+	http.Handle(config.AppConfig.Properties["StaticDir"], 
+				http.StripPrefix(config.AppConfig.Properties["StaticDir"],
+								 http.FileServer(http.Dir(strings.Trim(config.AppConfig.Properties["StaticDir"], "/")))))
+	
 	// Start listen routers
-	routers.Listen()
+	routers.Listen()		
 	// Launch the server
-	http.ListenAndServe(":9002", nil)
+	http.ListenAndServe(config.AppConfig.Properties["Port"], nil)
 }
