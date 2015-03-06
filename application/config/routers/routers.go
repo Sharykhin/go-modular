@@ -4,7 +4,7 @@ import (
 	"net/http"
 	controller "go-modular/application/controller"
 	admin "go-modular/application/modules/admin"
-	user "go-modular/application/modules/user"	
+	userModule "go-modular/application/modules/user/controller"	
 )
 
 
@@ -14,7 +14,7 @@ func Listen() {
 	var postController controller.PostController
 	// one more variant of defining controller
 	adminDefaultController := new(admin.DefaultController)
-	var userDefaultController user.DefaultController
+	var userDefaultController userModule.DefaultController
 
 	
 	http.HandleFunc("/", indexController.IndexAction)

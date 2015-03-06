@@ -12,7 +12,9 @@ func init() {
 	AppConfig.Properties = map[string]string{
 		"Port":":9002",
 		"StaticDir":"/public/vendor/",
-		"ViewFolder":"application/views/",
+		"AppDir":"application",
+		"TemplatesDir":"views",
+		
 	}
 }
 
