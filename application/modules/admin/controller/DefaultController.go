@@ -8,5 +8,5 @@ type DefaultController struct {
 }
 
 func (ctrl *DefaultController) IndexAction(res http.ResponseWriter, req *http.Request) {
-	ctrl.RenderView(res, "views/admin")
+	ctrl.RenderView(res, "modules/admin:index")
 }

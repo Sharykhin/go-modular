@@ -14,7 +14,7 @@ func init() {
 		"StaticDir":"/public/vendor/",
 		"AppDir":"application",
 		"TemplatesDir":"views",
-		
+
 	}
 }
 
