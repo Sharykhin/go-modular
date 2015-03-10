@@ -18,12 +18,20 @@ func init() {
 
 	switch config.AppConfig.Properties["DbDriver"] {
 	case "pg":		
-		DB,err = sql.Open("postgres", "user=test dbname=test password=test host=localhost port=5432");
+		DB,err = sql.Open("postgres",
+			 " user=" + config.DataBase.Properties["user"] +
+			 " dbname=" + config.DataBase.Properties["dbname"] + 
+			 " password=" + config.DataBase.Properties["password"] + 
+			 " host=" + config.DataBase.Properties["host"] + 
+			 " port=5432");
 		if err != nil {
 			log.Fatal(err)
 		}
 	case "mysql": 
-		DB, err = sql.Open("mysql", "root:pass4root@/test")
+		DB, err = sql.Open("mysql", 
+			config.DataBase.Properties["user"] + 
+			":" + config.DataBase.Properties["password"] + 
+			"@/" + config.DataBase.Properties["dbname"])
 		if err != nil {
 			log.Fatal(err)
 		}
