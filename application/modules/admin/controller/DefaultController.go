@@ -7,6 +7,10 @@ type DefaultController struct {
 	controller.BaseController
 }
 
-func (ctrl *DefaultController) IndexAction(res http.ResponseWriter, req *http.Request) {
-	ctrl.RenderView(res, "modules/admin:index")
+func (ctrl *DefaultController) IndexAction(res http.ResponseWriter, req *http.Request) error {
+	
+	if err := ctrl.RenderView(res, "modules/admin:index"); err != nil {
+		return err
+	}
+	return nil
 }

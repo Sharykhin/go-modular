@@ -8,6 +8,14 @@ import (
 )
 
 
+type appHandler func(http.ResponseWriter, *http.Request) error
+
+func (fn appHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    if err := fn(w, r); err != nil {
+        http.Error(w, err.Error(), 500)
+    }
+}
+
 func Listen() {
 
 	var indexController controller.IndexController
@@ -17,11 +25,11 @@ func Listen() {
 	var userDefaultController userModule.DefaultController
 
 	
-	http.HandleFunc("/", indexController.IndexAction)
-	http.HandleFunc("/posts", postController.IndexAction)
-	http.HandleFunc("/about", postController.AboutAction)
-	http.HandleFunc("/admin", adminDefaultController.IndexAction)
-	http.HandleFunc("/user", userDefaultController.IndexAction)
+	http.Handle("/", appHandler(indexController.IndexAction))
+	http.Handle("/posts", appHandler(postController.IndexAction))
+	http.Handle("/about", appHandler(postController.AboutAction))
+	http.Handle("/admin", appHandler(adminDefaultController.IndexAction))
+	http.Handle("/user", appHandler(userDefaultController.IndexAction))
 	
 	
 

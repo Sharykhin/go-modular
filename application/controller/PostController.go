@@ -7,11 +7,15 @@ type PostController struct {
 }
 
 
-func (ctrl *PostController) AboutAction(res http.ResponseWriter, req *http.Request) {
-	ctrl.Render(res,"other")	
+func (ctrl *PostController) AboutAction(res http.ResponseWriter, req *http.Request) error {
+	ctrl.Render(res,"other")
+	return nil	
 }
 
-func (ctrl *PostController) IndexAction(res http.ResponseWriter, req *http.Request) {
-	ctrl.RenderView(res,"post")
+func (ctrl *PostController) IndexAction(res http.ResponseWriter, req *http.Request) error {
+	if err:=ctrl.RenderView(res,"post"); err != nil {
+		return err
+	}
+	return nil
 }
 

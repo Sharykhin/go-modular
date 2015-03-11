@@ -11,26 +11,24 @@ import "fmt"
 type BaseController struct{}
 
 // Render single template
-func (ctrl BaseController) RenderView(res http.ResponseWriter, templateView string) {	
+func (ctrl BaseController) RenderView(res http.ResponseWriter, templateView string) error {	
 
-	templatePath,err := getTemplatePath(templateView)
-	
-	if err != nil {
-		http.Error(res, err.Error(), 500)
-		return 
+	templatePath,err := getTemplatePath(templateView)	
+	if err != nil {	
+		return err
 	}
 
 	t, err := template.ParseFiles(templatePath)
-	if err != nil {
-		http.Error(res, err.Error(), 500)
-		return 		
+	if err != nil {		
+		return err 		
 	}
-	err = t.Execute(res,nil)
 
-	if err != nil {
-		http.Error(res, err.Error(), 500)
-		return 	
-	}	
+	err = t.Execute(res,nil)
+	if err != nil {		
+		return err 	
+	}
+
+	return nil	
 }
 
 // Render template with layout
