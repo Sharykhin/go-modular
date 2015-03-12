@@ -2,7 +2,6 @@ package controller
 
 import "net/http"
 //import "go-modular/core/database"
-//import "log"
 
 
 type IndexController struct {
