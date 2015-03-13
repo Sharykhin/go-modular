@@ -13,7 +13,13 @@ func (ctrl *PostController) AboutAction(res http.ResponseWriter, req *http.Reque
 }
 
 func (ctrl *PostController) IndexAction(res http.ResponseWriter, req *http.Request) error {
-	if err:=ctrl.RenderView(res,"post"); err != nil {
+	if err:=ctrl.RenderView(res,"post",struct {
+		User string
+		Dates [2]int
+	}{
+		User: "John",
+		Dates : [2]int{2,3},
+	}); err != nil {
 		return err
 	}
 	return nil

@@ -11,8 +11,9 @@ import "fmt"
 type BaseController struct{}
 
 // Render single template
-func (ctrl BaseController) RenderView(res http.ResponseWriter, templateView string) error {	
+func (ctrl BaseController) RenderView(res http.ResponseWriter, templateView string,  data interface{} ) error {	
 
+	
 	templatePath,err := getTemplatePath(templateView)	
 	if err != nil {	
 		return err
@@ -23,7 +24,7 @@ func (ctrl BaseController) RenderView(res http.ResponseWriter, templateView stri
 		return err 		
 	}
 
-	err = t.Execute(res,nil)
+	err = t.Execute(res,data)
 	if err != nil {		
 		return err 	
 	}

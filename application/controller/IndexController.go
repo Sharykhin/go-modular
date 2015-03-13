@@ -13,7 +13,11 @@ func (ctrl *IndexController) IndexAction(res http.ResponseWriter, req *http.Requ
 	/*if _, err := database.DB.Exec(`INSERT INTO todo(title, isdone) VALUES('take a message', false)`); err != nil {			
 			return err 
 	} */
-	if err := ctrl.RenderView(res, "index"); err != nil {
+	if err := ctrl.RenderView(res, "index", struct {
+		TestData string
+	}{
+		TestData: "Test string",
+	}); err != nil {
 		return err
 	}
 	return nil

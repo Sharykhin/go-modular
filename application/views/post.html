@@ -4,5 +4,10 @@
 	</head>
 	<body>
 		<h1>Posts!</h1>
+		<p>User name: {{.User}}</p>
+		<p>Your dates pleas:</p>
+		{{range $date := .Dates}}
+			<p><i>{{$date}}</i></p>
+		{{end}}
 	</body>
 </html>
