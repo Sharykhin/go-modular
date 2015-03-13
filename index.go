@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	//"fmt"
 	config "go-modular/application/config"
 	routers "go-modular/application/config/routers"
 	"net/http"
