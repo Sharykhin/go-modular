@@ -9,8 +9,7 @@ import (
 	"strings"
 )
 
-func ServeFileHandler(res http.ResponseWriter, req *http.Request) {
-	fmt.Println("Request")
+func ServeFileHandler(res http.ResponseWriter, req *http.Request) {	
 	fname := path.Base(req.URL.Path)
 	http.ServeFile(res, req, "./"+fname)
 }
