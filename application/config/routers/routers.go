@@ -28,5 +28,6 @@ func Listen() {
 	http.Handle("/about", appHandler(postController.AboutAction))
 	http.Handle("/admin", appHandler(adminDefaultController.IndexAction))
 	http.Handle("/user", appHandler(userDefaultController.IndexAction))
+	http.Handle("/user/profile", appHandler(userDefaultController.UserProfileAction))
 
 }

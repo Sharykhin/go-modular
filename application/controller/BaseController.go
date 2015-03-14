@@ -33,7 +33,7 @@ func (ctrl BaseController) RenderView(res http.ResponseWriter, templateView stri
 }
 
 // Render template with layout
-func (ctrl BaseController) Render(res http.ResponseWriter, templateView string) {
+func (ctrl BaseController) Render(res http.ResponseWriter, templateView string, data interface{}) {
 
 	defer func() {
 		err := recover()
@@ -60,7 +60,7 @@ func (ctrl BaseController) Render(res http.ResponseWriter, templateView string) 
 		return 	
 	}
 
-	tmpl[templateView].ExecuteTemplate(res,"base", nil)
+	tmpl[templateView].ExecuteTemplate(res,"base", data)
 
 	if err != nil {
 		http.Error(res, err.Error(), 500)

@@ -8,7 +8,13 @@ type PostController struct {
 
 
 func (ctrl *PostController) AboutAction(res http.ResponseWriter, req *http.Request) error {
-	ctrl.Render(res,"other")
+	ctrl.Render(res,"other", struct {
+		Numbers [5]int
+		Article string
+		}{
+			Numbers: [5]int{1,14,44,15,29},
+			Article: "Make a join",
+		})
 	return nil	
 }
 

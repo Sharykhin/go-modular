@@ -1,5 +1,10 @@
 {{define "head"}}{{end}}
 
 {{define "body"}}
-	<h1>other</h1>
+	<h1>{{.Article}}</h1>
+	<ul>
+	{{ range $number := .Numbers}}
+		<li><a href="javascript:void(0)">{{$number}}</a></li>
+	{{end}}
+	</ul>
 {{end}}
