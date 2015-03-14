@@ -4,9 +4,9 @@
 	</head>
 	<body>
 		<h1>Posts!</h1>
-		<p>User name: {{.User}}</p>
+		<p>User name: {{.Data.User}}</p>
 		<p>Your dates pleas:</p>
-		{{range $date := .Dates}}
+		{{range $date := .Data.Dates}}
 			<p><i>{{$date}}</i></p>
 		{{end}}
 	</body>

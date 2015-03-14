@@ -24,7 +24,12 @@ func (ctrl BaseController) RenderView(res http.ResponseWriter, templateView stri
 		return err 		
 	}
 
-	err = t.Execute(res,data)
+	err = t.Execute(res,struct {
+		Data interface{}
+
+		}{
+			Data: data,
+			})
 	if err != nil {		
 		return err 	
 	}
@@ -33,7 +38,7 @@ func (ctrl BaseController) RenderView(res http.ResponseWriter, templateView stri
 }
 
 // Render template with layout
-func (ctrl BaseController) Render(res http.ResponseWriter, templateView string, data interface{}) {
+func (ctrl BaseController) Render(res http.ResponseWriter, templateView string, data interface{}) error {
 
 	defer func() {
 		err := recover()
@@ -43,12 +48,12 @@ func (ctrl BaseController) Render(res http.ResponseWriter, templateView string, 
 		}		
 	}()
 	
-
+	
+	// Get path to template or error if it was occured
 	templatePath,err := getTemplatePath(templateView)
 	
 	if err != nil {
-		http.Error(res, err.Error(), 500)
-		return 		
+		return err	
 	}
 
 	tmpl := make(map[string]*template.Template)
@@ -56,16 +61,22 @@ func (ctrl BaseController) Render(res http.ResponseWriter, templateView string, 
 									   config.AppConfig.Properties["AppDir"] + "/" + config.AppConfig.Properties["TemplatesDir"] + "/" + "layouts/base.html"))
 
 	if err != nil {
-		http.Error(res, err.Error(), 500)
-		return 	
+		return err
 	}
 
-	tmpl[templateView].ExecuteTemplate(res,"base", data)
+	tmpl[templateView].ExecuteTemplate(res,"base", struct {
+		Data interface{}
+		Layout string
+		}{
+			Data: data,
+			Layout: "base.html",	
+		})
 
 	if err != nil {
-		http.Error(res, err.Error(), 500)
-		return 	
+		return err
 	}
+
+	return nil
 }
 
 

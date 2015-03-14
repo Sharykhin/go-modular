@@ -16,11 +16,13 @@ func (ctrl *DefaultController) IndexAction(res http.ResponseWriter, req *http.Re
 }
 
 func (ctrl *DefaultController) UserProfileAction(res http.ResponseWriter, req *http.Request) error {
-	ctrl.Render(res, "modules/user:profile",struct {
+	if err := ctrl.Render(res, "modules/user:profile",struct {
 		UserName string
 
 		}{
 		UserName: "John",	
-		})
+		}); err != nil {
+		return err
+	}
 	return nil
 }
