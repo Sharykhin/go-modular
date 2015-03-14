@@ -58,7 +58,10 @@ func (ctrl BaseController) Render(res http.ResponseWriter, templateView string, 
 
 	tmpl := make(map[string]*template.Template)
 	tmpl[templateView] = template.Must(template.ParseFiles(templatePath,
-									   config.AppConfig.Properties["AppDir"] + "/" + config.AppConfig.Properties["TemplatesDir"] + "/" + "layouts/base.html"))
+									   config.AppConfig.Properties["AppDir"] + "/" +
+									   config.AppConfig.Properties["TemplatesDir"] + "/" +
+									   "layouts/" + 
+									   config.AppConfig.Properties["Layout"]))
 
 	if err != nil {
 		return err

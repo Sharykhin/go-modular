@@ -16,6 +16,7 @@ func init() {
 		"AppDir":"application",
 		"TemplatesDir":"views",
 		"DbDriver":"pg", // pg, mysql
+		"Layout":"base.html",
 
 	}
 
