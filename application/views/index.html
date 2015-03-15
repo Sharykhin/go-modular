@@ -4,6 +4,9 @@
 	</head>
 	<body>
 		<h1>Hello world!</h1>
-		<h1> {{.Data.TestData}}
+		<h1> {{.Data.TestData}}</h1>
+		
+		{{ template "ajax" .Data }}
+		{{ template "check" .Data }}
 	</body>
 </html>

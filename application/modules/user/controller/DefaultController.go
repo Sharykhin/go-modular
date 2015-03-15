@@ -8,20 +8,19 @@ type DefaultController struct {
 }
 
 func (ctrl *DefaultController) IndexAction(res http.ResponseWriter, req *http.Request) error {
-	
-	if err := ctrl.RenderView(res, "modules/user:user",nil); err != nil {
+
+	if err := ctrl.RenderView(res, "modules/user:user", nil, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (ctrl *DefaultController) UserProfileAction(res http.ResponseWriter, req *http.Request) error {
-	if err := ctrl.Render(res, "modules/user:profile",struct {
+	if err := ctrl.Render(res, "modules/user:profile", nil, struct {
 		UserName string
-
-		}{
-		UserName: "John",	
-		}); err != nil {
+	}{
+		UserName: "John",
+	}); err != nil {
 		return err
 	}
 	return nil
