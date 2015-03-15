@@ -4,15 +4,19 @@ import (
 	controller "go-modular/application/controller"
 	adminModule "go-modular/application/modules/admin/controller"
 	userModule "go-modular/application/modules/user/controller"
+	errorComponent "go-modular/core/components/error"
 	"net/http"
 )
 
 type appHandler func(http.ResponseWriter, *http.Request) error
 
-func (fn appHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if err := fn(w, r); err != nil {
-		http.Error(w, err.Error(), 500)
+func (fn appHandler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+
+	if err := fn(res, req); err != nil {
+		errorComponent.ErrorHandler(res, req, http.StatusInternalServerError,err.Error())
+		return	
 	}
+	
 }
 
 func Listen() {
