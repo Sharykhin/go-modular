@@ -1,4 +1,4 @@
-package model
+package todo
 
 import "go-modular/core/database"
 //import "fmt"
@@ -16,8 +16,7 @@ func New() (*Todo) {
 		"Title":nil,
 		"Isdone":false,
 	}
-	todo.TableName="todo"
-	
+	todo.TableName="todo"	
 	return todo
 }
 
