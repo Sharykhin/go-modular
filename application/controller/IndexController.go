@@ -25,12 +25,16 @@ func (ctrl *IndexController) IndexAction(res http.ResponseWriter, req *http.Requ
 	if err :=todoModel.Save(); err != nil {
 		return err
 	}
-	
+
 	fmt.Printf("%T - %v \n\n",todoModel.GetId(),todoModel.GetId())
 	fmt.Printf("%T - %v \n\n",todoModel.GetTitle(),todoModel.GetTitle())
 	fmt.Printf("%T - %v \n\n",todoModel.GetIsDone(),todoModel.GetIsDone())
 
-
+	todoModel.SetTitle("ABU DABI")
+	fmt.Printf("%T - %v \n\n",todoModel.GetTitle(),todoModel.GetTitle())
+	if err :=todoModel.Save(); err != nil {
+		return err
+	}
 	
 	if err := ctrl.RenderView(res, "index", []string{"include", "modules/admin:check"}, struct {
 		TestData string

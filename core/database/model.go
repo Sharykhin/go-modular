@@ -13,6 +13,10 @@ type Model struct {
 
 func (model *Model) Save() error {	
 
+	if model.Schema[model.PrimaryKey] != nil {
+		return updateModel(model)
+	}
+
 	var insertQuery string = "INSERT INTO " + model.TableName + "("
     var queryValues string	
 
@@ -54,6 +58,11 @@ func (model *Model) Save() error {
 	}
 	model.Schema["Todoid"]=lastId
 	
+	return nil
+}
+
+func updateModel(model *Model) error {
+	fmt.Println("UPDATING")
 	return nil
 }
 
