@@ -48,6 +48,7 @@ func (model *Model) Save() error {
     
     
    	fmt.Println(insertQuery)
+
 	if _, err := DB.Exec(insertQuery); err != nil {
 			return err
 	}
@@ -61,8 +62,40 @@ func (model *Model) Save() error {
 	return nil
 }
 
+
 func updateModel(model *Model) error {
-	fmt.Println("UPDATING")
+	// Initialize query for update
+	var updateQuery string = "UPDATE " + model.TableName + " SET "
+
+	// Go through all columns instead of primary and put the appropriate values
+	for column, value := range model.Schema {
+
+			if column == model.PrimaryKey {
+				continue
+			}
+			// Such as values of model.Schema have type interface{} we Sprintf to return string
+			switch fmt.Sprintf("%T",value) {
+			case "string":
+				updateQuery += column + "='" + fmt.Sprintf("%v",value) + "',"	
+			case "bool":
+				updateQuery += column + "=" + fmt.Sprintf("%v",value) + ","
+			case "int":
+				updateQuery += column + "=" + fmt.Sprintf("%v",value)	+ ","
+			default:
+				updateQuery += column + "='" + fmt.Sprintf("%v",value) + "',"
+			}					
+	}
+	// Erase last comma
+	updateQuery = strings.TrimRight(updateQuery,",")
+	// Add conditional
+	updateQuery += " WHERE " + model.PrimaryKey + "=" + fmt.Sprintf("%v",model.Schema[model.PrimaryKey])
+
+	fmt.Println(updateQuery)
+	// Do query
+	if _,err := DB.Exec(updateQuery); err != nil {
+		return err
+	}
+
 	return nil
 }
 

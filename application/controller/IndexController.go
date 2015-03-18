@@ -31,10 +31,19 @@ func (ctrl *IndexController) IndexAction(res http.ResponseWriter, req *http.Requ
 	fmt.Printf("%T - %v \n\n",todoModel.GetIsDone(),todoModel.GetIsDone())
 
 	todoModel.SetTitle("ABU DABI")
+	todoModel.SetIsDone(true)
+
 	fmt.Printf("%T - %v \n\n",todoModel.GetTitle(),todoModel.GetTitle())
 	if err :=todoModel.Save(); err != nil {
 		return err
 	}
+
+	fmt.Printf("%T - %v \n\n",todoModel.GetId(),todoModel.GetId())
+	fmt.Printf("%T - %v \n\n",todoModel.GetTitle(),todoModel.GetTitle())
+	fmt.Printf("%T - %v \n\n",todoModel.GetIsDone(),todoModel.GetIsDone())
+
+	fmt.Printf("%T - %v \n\n",todoModel.Title,todoModel.Title)
+	fmt.Printf("%T - %v \n\n",todoModel.Isdone,todoModel.Isdone)
 	
 	if err := ctrl.RenderView(res, "index", []string{"include", "modules/admin:check"}, struct {
 		TestData string

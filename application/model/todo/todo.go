@@ -24,10 +24,12 @@ func New() (*Todo) {
 }
 
 func (todo *Todo) SetTitle(title string) {
+	todo.Title = title
 	todo.Schema["Title"] = title
 }
 
 func (todo *Todo) SetIsDone(isdone bool) {
+	todo.Isdone = isdone
 	todo.Schema["Isdone"] = isdone
 }
 
