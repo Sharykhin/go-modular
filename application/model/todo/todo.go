@@ -1,44 +1,41 @@
 package todo
 
 import "go-modular/core/database"
-//import "fmt"
 
 type Todo struct {
 	database.Model
-	Todoid int
-	Title string
-	Isdone bool "false"
+	todoid int
+	title string
+	isdone bool "false"
 }
 
 
 func New() (*Todo) {
 	todo := new(Todo)	
 	todo.Schema = map[string]interface{}{
-		"Todoid":nil,
-		"Title":nil,
-		"Isdone":false,
+		"todoid":nil,
+		"title":nil,
+		"isdone":false,
 	}
-	todo.PrimaryKey="Todoid"
+	todo.PrimaryKey="todoid"
 	todo.TableName="todo"	
 	return todo
 }
 
-func (todo *Todo) SetTitle(title string) {
-	todo.Title = title
-	todo.Schema["Title"] = title
+func (todo *Todo) SetTitle(title string) {	
+	todo.Schema["title"] = title
 }
 
 func (todo *Todo) SetIsDone(isdone bool) {
-	todo.Isdone = isdone
-	todo.Schema["Isdone"] = isdone
+	todo.Schema["isdone"] = isdone
 }
 
 func (todo *Todo) GetTitle() (interface{}) {
-	return todo.Schema["Title"]
+	return todo.Schema["title"]
 }
 
 func (todo *Todo) GetIsDone() (interface{}) {
-	return todo.Schema["Isdone"]
+	return todo.Schema["isdone"]
 }
 
 func (todo *Todo) GetId() (interface{}) {

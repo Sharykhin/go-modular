@@ -78,6 +78,21 @@ func (model *Model) Delete() error {
 	return nil
 }
 
+func (model *Model) FindById(id int) error {
+	fmt.Println("Find is running...")
+	if model.Schema[model.PrimaryKey] != nil {
+		return errors.New("Your model has already references to the row in tables: primary key is " + fmt.Sprintf("%v",model.Schema[model.PrimaryKey]))
+	}
+
+	row := DB.QueryRow("SELECT * FROM " + model.TableName + " WHERE " + model.PrimaryKey + " = " + fmt.Sprintf("%v",id))
+		
+	if err := row.Scan(model.Schema); err != nil {
+				return err
+	}	
+	return nil
+	
+}
+
 
 func updateModel(model *Model) error {
 	// Initialize query for update
