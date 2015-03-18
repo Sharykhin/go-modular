@@ -19,6 +19,7 @@ func (ctrl *IndexController) IndexAction(res http.ResponseWriter, req *http.Requ
 		return nil
 	}	
 	
+	
 	todoModel := model.New()
 	todoModel.SetTitle("Make love 2")
 	todoModel.SetIsDone(false)	
@@ -28,8 +29,26 @@ func (ctrl *IndexController) IndexAction(res http.ResponseWriter, req *http.Requ
 
 	fmt.Printf("%T - %v \n\n",todoModel.GetId(),todoModel.GetId())
 	fmt.Printf("%T - %v \n\n",todoModel.GetTitle(),todoModel.GetTitle())
-	fmt.Printf("%T - %v \n\n",todoModel.GetIsDone(),todoModel.GetIsDone())
+	fmt.Printf("%T - %v \n\n",todoModel.GetIsDone(),todoModel.GetIsDone())	
 
+
+	if err := todoModel.Delete(); err != nil {
+		return err
+	}
+
+	fmt.Printf("%T - %v \n\n",todoModel.GetId(),todoModel.GetId())
+	fmt.Printf("%T - %v \n\n",todoModel.GetTitle(),todoModel.GetTitle())
+	fmt.Printf("%T - %v \n\n",todoModel.GetIsDone(),todoModel.GetIsDone())	
+
+	if err :=todoModel.Save(); err != nil {
+		return err
+	}
+
+	fmt.Printf("%T - %v \n\n",todoModel.GetId(),todoModel.GetId())
+	fmt.Printf("%T - %v \n\n",todoModel.GetTitle(),todoModel.GetTitle())
+	fmt.Printf("%T - %v \n\n",todoModel.GetIsDone(),todoModel.GetIsDone())	
+	/*
+	// Updating example
 	todoModel.SetTitle("ABU DABI")
 	todoModel.SetIsDone(true)
 
@@ -44,6 +63,7 @@ func (ctrl *IndexController) IndexAction(res http.ResponseWriter, req *http.Requ
 
 	fmt.Printf("%T - %v \n\n",todoModel.Title,todoModel.Title)
 	fmt.Printf("%T - %v \n\n",todoModel.Isdone,todoModel.Isdone)
+	*/
 	
 	if err := ctrl.RenderView(res, "index", []string{"include", "modules/admin:check"}, struct {
 		TestData string

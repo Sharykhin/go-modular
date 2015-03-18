@@ -3,6 +3,7 @@ package database
 import "fmt"
 import "strings"
 import config "go-modular/application/config"
+import "errors"
 
 
 type Model struct {
@@ -57,8 +58,23 @@ func (model *Model) Save() error {
 	if err != nil {
 		return err
 	}
-	model.Schema["Todoid"]=lastId
+	model.Schema[model.PrimaryKey]=lastId
 	
+	return nil
+}
+
+func (model *Model) Delete() error {
+	// The value of primary key is required
+	if model.Schema[model.PrimaryKey] == nil {
+		return errors.New("Model which is responsible for `" + model.TableName + "` table doesn't have value of primary key")
+	}
+
+	if _,err := DB.Exec("DELETE FROM " + model.TableName + " WHERE " + model.PrimaryKey + "=" + fmt.Sprintf("%v",model.Schema[model.PrimaryKey])); err != nil {
+		return err
+	}
+	// Set primary key nil
+	model.Schema[model.PrimaryKey] = nil
+
 	return nil
 }
 
