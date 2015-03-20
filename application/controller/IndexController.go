@@ -3,7 +3,7 @@ package controller
 import "net/http"
 import errorComponent "go-modular/core/components/error"
 import model "go-modular/application/model/todo"
-//import "fmt"
+import "fmt"
 //import "go-modular/core/database"
 
 
@@ -21,9 +21,19 @@ func (ctrl *IndexController) IndexAction(res http.ResponseWriter, req *http.Requ
 	
 	
 	todoModel := model.New()	
-	todoModel.SetTitle("buy a car")	
+	if err:=todoModel.FindById(55); err != nil {
+		return err
+	}
+	//todoModel.SetTitle("buy a car")	
 	
-	fmt.Println(todoModel)
+	fmt.Println("--------")
+	fmt.Println(todoModel.GetTitle())
+	todoModel.SetIsDone(true)
+	fmt.Println(todoModel.GetId())
+	fmt.Println(todoModel.GetIsDone())
+	if err := todoModel.Save(); err != nil {
+		return err
+	}
 
 	
 	if err := ctrl.RenderView(res, "index", []string{"include", "modules/admin:check"}, struct {

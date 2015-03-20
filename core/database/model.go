@@ -4,6 +4,7 @@ import "fmt"
 import "strings"
 import config "go-modular/application/config"
 import "errors"
+import "database/sql"
 
 
 type Model struct {
@@ -78,19 +79,48 @@ func (model *Model) Delete() error {
 	return nil
 }
 
+// Return data of model from database by using primary key
 func (model *Model) FindById(id int) error {
 	fmt.Println("Find is running...")
 	if model.Schema[model.PrimaryKey] != nil {
-		return errors.New("Your model has already references to the row in tables: primary key is " + fmt.Sprintf("%v",model.Schema[model.PrimaryKey]))
+		return errors.New("Your model has already referenced to the row in table: primary key is " + fmt.Sprintf("%v",model.Schema[model.PrimaryKey]))
 	}
-
-	row := DB.QueryRow("SELECT * FROM " + model.TableName + " WHERE " + model.PrimaryKey + " = " + fmt.Sprintf("%v",id))
-		
-	if err := row.Scan(model.Schema); err != nil {
-				return err
-	}	
-	return nil
-	
+	// Make query
+	row,_ := DB.Query("SELECT * FROM " + model.TableName + " WHERE " + model.PrimaryKey + " = " + fmt.Sprintf("%v",id))
+	// Get columns name
+	columns, err := row.Columns()
+    if err != nil {
+        return err // proper error handling instead of panic in your app
+    }
+    // Initialize slice which will consist values from database
+    values := make([]sql.RawBytes, len(columns))
+    // Initialize slice which will consist pointers to the values
+    scanArgs := make([]interface{},len(columns))
+	// Put pointers of values into slice of inteface  
+    for i := range values {
+        scanArgs[i] = &values[i]
+    }
+    // Thought the row
+   	for row.Next() {
+   		// Scan returned result
+		err:= row.Scan(scanArgs...)
+	    if err != nil {
+	    	return err
+	    }   
+	    var value string
+	    // Go though all returned values and push them to the model
+        for i, col := range values {        	
+            // Here we can check if the value is nil (NULL value)
+            if col == nil {
+                value = "NULL"
+            } else {
+                value = string(col)
+            }
+            model.Schema[columns[i]]=value            
+        }        
+   	}	
+    
+	return nil	
 }
 
 
