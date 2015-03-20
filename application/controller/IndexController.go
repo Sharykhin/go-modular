@@ -34,6 +34,7 @@ func (ctrl *IndexController) IndexAction(res http.ResponseWriter, req *http.Requ
 	if err := todoModel.Save(); err != nil {
 		return err
 	}
+	todoModel.FindAll()
 
 	
 	if err := ctrl.RenderView(res, "index", []string{"include", "modules/admin:check"}, struct {
