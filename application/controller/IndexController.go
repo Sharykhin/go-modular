@@ -17,25 +17,20 @@ func (ctrl *IndexController) IndexAction(res http.ResponseWriter, req *http.Requ
 	if req.URL.Path != "/" {
 		errorComponent.ErrorHandler(res, req, http.StatusNotFound,"")
 		return nil
-	}	
-	
+	}		
 	
 	todoModel := model.New()	
 	if err:=todoModel.FindById(55); err != nil {
 		return err
 	}
-	//todoModel.SetTitle("buy a car")	
 	
-	fmt.Println("--------")
-	fmt.Println(todoModel.GetTitle())
-	todoModel.SetIsDone(true)
-	fmt.Println(todoModel.GetId())
-	fmt.Println(todoModel.GetIsDone())
-	if err := todoModel.Save(); err != nil {
+	todoData,err := todoModel.FindAll()
+	if err != nil {
 		return err
 	}
-	todoModel.FindAll()
-
+	for _,todo := range todoData {
+		fmt.Println(todo["title"])
+	}
 	
 	if err := ctrl.RenderView(res, "index", []string{"include", "modules/admin:check"}, struct {
 		TestData string

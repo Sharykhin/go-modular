@@ -79,20 +79,20 @@ func (model *Model) Delete() error {
 	return nil
 }
 
-func (model * Model) FindAll() error {
-
-	//var models []map[string]interface{}
-
+// Method return slice of map of all rows from table and error
+func (model * Model) FindAll() ([]map[string]interface{}, error) {
+	// Initilize returning data
+	var data []map[string]interface{}	
+	// Make query to get all columns and all rows from table
 	rows,err := DB.Query("SELECT * FROM " + model.TableName)
 	if err != nil {
-		return err
+		return nil,err
 	}
-
 
 	// Get column names
     columns, err := rows.Columns()
     if err != nil {
-        return err
+        return nil,err
     }
 
     // Make a slice for the values
@@ -105,13 +105,15 @@ func (model * Model) FindAll() error {
     for i := range values {
         scanArgs[i] = &values[i]
     }
-
+   
     // Fetch rows
     for rows.Next() {
+    	// Initilize map, which will be responsible for saving data of each row
+    	rowData := make(map[string]interface{})
         // get RawBytes from data
         err = rows.Scan(scanArgs...)
         if err != nil {
-            return err
+            return nil,err
         }
 
         // Now do something with the data.
@@ -124,18 +126,21 @@ func (model * Model) FindAll() error {
             } else {
                 value = string(col)
             }
-            fmt.Println(columns[i], ": ", value)
+        	// Fill map, where key will be column name
+    		rowData[columns[i]]=value             
         }
-        fmt.Println("-----------------------------------")
-    }
-    if err = rows.Err(); err != nil {
-        panic(err.Error()) // proper error handling instead of panic in your app
+    	// Fill our returning slice
+        data = append(data,rowData)       
     }
 
+    if err := rows.Err(); err != nil {
+       return nil,err
+    }
 
-
-	return nil
+	return data,nil
 }
+
+
 
 // Return data of model from database by using primary key
 func (model *Model) FindById(id int) error {
