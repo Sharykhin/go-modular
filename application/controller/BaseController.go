@@ -5,6 +5,7 @@ import "net/http"
 import config "go-modular/application/config"
 import "regexp"
 import "strings"
+import global "go-modular/application/config/global"
 
 //import "errors"
 import "fmt"
@@ -35,10 +36,15 @@ func (ctrl *BaseController) RenderView(res http.ResponseWriter, templateView str
 		}
 	}
 
+
 	err = t.Execute(res, struct {
 		Data interface{}
+		App  global.GlolbalData
+		
 	}{
 		Data: data,
+		App: global.App,
+		
 	})
 	if err != nil {
 		return err
@@ -90,11 +96,11 @@ func (ctrl BaseController) Render(res http.ResponseWriter, templateView string, 
 	
 
 	tmpl[templateView].ExecuteTemplate(res, "base", struct {
-		Data   interface{}
-		Layout string
+		Data   interface{}	
+		App  global.GlolbalData	
 	}{
-		Data:   data,
-		Layout: "base.html",
+		Data:   data,	
+		App: global.App,	
 	})
 
 	if err != nil {
