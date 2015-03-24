@@ -1,13 +1,15 @@
 package controller
 
 import "net/http"
+import "fmt"
+
 
 type PostController struct {
 	BaseController
 }
 
 func (ctrl *PostController) AboutAction(res http.ResponseWriter, req *http.Request) error {
-	if err := ctrl.Render(res, "other", []string{"include"}, struct {
+	if err := ctrl.Render(res, req, "other", []string{"include"}, struct {
 		Numbers [5]int
 		Article string
 		Data    int
@@ -24,7 +26,12 @@ func (ctrl *PostController) AboutAction(res http.ResponseWriter, req *http.Reque
 }
 
 func (ctrl *PostController) IndexAction(res http.ResponseWriter, req *http.Request) error {
-	if err := ctrl.RenderView(res, "post", nil, struct {
+
+	session, _ := store.Get(req, "session")
+	fmt.Println(session.Values["foo"])
+	fmt.Println(session.Values[42])
+
+	if err := ctrl.RenderView(res,req, "post", nil, struct {
 		User  string
 		Dates [2]int
 	}{

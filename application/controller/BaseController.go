@@ -6,14 +6,16 @@ import config "go-modular/application/config"
 import "regexp"
 import "strings"
 import global "go-modular/application/config/global"
+import "github.com/gorilla/sessions"
 
 //import "errors"
 import "fmt"
 
 type BaseController struct{}
 
-// Render single template
-func (ctrl *BaseController) RenderView(res http.ResponseWriter, templateView string, includes []string, data interface{}) error {
+func (ctrl *BaseController) RenderView(res http.ResponseWriter, req *http.Request, templateView string, includes []string, data interface{}) error {
+
+	session, _ := store.Get(req, "session")	
 
 	templatePath, err := getTemplatePath(templateView)
 	if err != nil {
@@ -40,11 +42,11 @@ func (ctrl *BaseController) RenderView(res http.ResponseWriter, templateView str
 	err = t.Execute(res, struct {
 		Data interface{}
 		App  global.GlolbalData
-		
+		Session *sessions.Session
 	}{
 		Data: data,
 		App: global.App,
-		
+		Session: session,
 	})
 	if err != nil {
 		return err
@@ -53,8 +55,12 @@ func (ctrl *BaseController) RenderView(res http.ResponseWriter, templateView str
 	return nil
 }
 
+
+
+
+
 // Render template with layout
-func (ctrl BaseController) Render(res http.ResponseWriter, templateView string, includes []string, data interface{}) error {
+func (ctrl BaseController) Render(res http.ResponseWriter, req *http.Request, templateView string, includes []string, data interface{}) error {
 
 	defer func() {
 		err := recover()
@@ -63,6 +69,8 @@ func (ctrl BaseController) Render(res http.ResponseWriter, templateView string, 
 			return
 		}
 	}()
+
+	session, _ := store.Get(req, "session")
 
 	// Get path to template or error if it was occured
 	templatePath, err := getTemplatePath(templateView)
@@ -98,9 +106,11 @@ func (ctrl BaseController) Render(res http.ResponseWriter, templateView string, 
 	tmpl[templateView].ExecuteTemplate(res, "base", struct {
 		Data   interface{}	
 		App  global.GlolbalData	
+		Session *sessions.Session
 	}{
 		Data:   data,	
 		App: global.App,	
+		Session: session,
 	})
 
 	if err != nil {

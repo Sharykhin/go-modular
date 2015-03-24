@@ -9,14 +9,14 @@ type DefaultController struct {
 
 func (ctrl *DefaultController) IndexAction(res http.ResponseWriter, req *http.Request) error {
 
-	if err := ctrl.RenderView(res, "modules/user:user", nil, nil); err != nil {
+	if err := ctrl.RenderView(res,req, "modules/user:user", nil, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (ctrl *DefaultController) UserProfileAction(res http.ResponseWriter, req *http.Request) error {
-	if err := ctrl.Render(res, "modules/user:profile", nil, struct {
+	if err := ctrl.Render(res,req, "modules/user:profile", nil, struct {
 		UserName string
 	}{
 		UserName: "John",
