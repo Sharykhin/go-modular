@@ -31,6 +31,12 @@ func (ctrl *PostController) IndexAction(res http.ResponseWriter, req *http.Reque
 	fmt.Println(session.Values["foo"])
 	fmt.Println(session.Values[42])
 
+
+	if flashes := session.Flashes(); len(flashes) > 0 {
+        // Just print the flash values.
+        fmt.Println(flashes)
+    }
+
 	if err := ctrl.RenderView(res,req, "post", nil, struct {
 		User  string
 		Dates [2]int

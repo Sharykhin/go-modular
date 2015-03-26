@@ -25,8 +25,16 @@ func (ctrl *IndexController) IndexAction(res http.ResponseWriter, req *http.Requ
 	session, _ := store.Get(req, "session")
 	session.Values["foo"] = "bar"
     session.Values[42] = 43
+    
+
+    //session.AddFlash("Hello, flash messages world!")
+
     session.Save(req, res)
 
+    if flashes := session.Flashes(); len(flashes) > 0 {
+        // Just print the flash values.
+        fmt.Println(flashes)
+    }
 
 	todoModel := model.New()	
 	if err:=todoModel.FindById(55); err != nil {

@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"path"
 	"strings"
+	"github.com/gorilla/context"
 
 )
 
@@ -28,5 +29,5 @@ func main() {
 	// Start listen routers
 	routers.Listen()
 	// Launch the server
-	http.ListenAndServe(config.AppConfig.Properties["Port"], nil)
+	http.ListenAndServe(config.AppConfig.Properties["Port"], context.ClearHandler(http.DefaultServeMux))
 }
