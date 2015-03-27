@@ -4,12 +4,19 @@
 	</head>
 	<body>
 		<h1>Hello world!</h1>
+		<uL>
+			<li><a href="/admin">Admin</a></li>
+			<li><a href="/posts">Posts</a></li>
+			<li><a href="/">Index</a></li>
+		</uL>
 		<h1> {{.Data.TestData}}</h1>
 		<h4>{{.Session.Values.foo}}</h4>		
-		<h5>Flash messages</h5>		
-		{{range $flash := .Session.Flashes}}
+		<h5>Flash messages</h5>	
+		
+		{{range $flash := .SessionFlashes}}
 			<h5>{{$flash}}</h5>
 		{{end}}
+		
 		{{ template "ajax" .Data }}
 		{{ template "check" .Data }}
 	</body>

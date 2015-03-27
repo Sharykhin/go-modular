@@ -6,8 +6,8 @@ import config "go-modular/application/config"
 import "regexp"
 import "strings"
 import global "go-modular/application/config/global"
+import sessionComponent "go-modular/core/components/session"
 import "github.com/gorilla/sessions"
-
 //import "errors"
 import "fmt"
 
@@ -15,7 +15,7 @@ type BaseController struct{}
 
 func (ctrl *BaseController) RenderView(res http.ResponseWriter, req *http.Request, templateView string, includes []string, data interface{}) error {
 
-	session, _ := store.Get(req, "session")	
+	session, _ := sessionComponent.Store.Get(req, "session")	
 
 	templatePath, err := getTemplatePath(templateView)
 	if err != nil {
@@ -37,16 +37,29 @@ func (ctrl *BaseController) RenderView(res http.ResponseWriter, req *http.Reques
 			t.ParseFiles(includeFile)
 		}
 	}
-
-
+	
+    flashMessages := func(key interface{}) []interface{} {
+    	if key == nil || key == "" {
+    		key = "_flash"
+    	}
+    	
+    	messages := session.Flashes(fmt.Sprintf("%v",key))
+    	session.Values[fmt.Sprintf("%v",key)]=nil
+    	//delete(session.Values,fmt.Sprintf("%v",key))
+    	session.Save(req, res)
+    	return messages
+    }
+	
 	err = t.Execute(res, struct {
 		Data interface{}
 		App  global.GlolbalData
 		Session *sessions.Session
+		FlashMessage func(key interface{}) []interface{}		
 	}{
 		Data: data,
 		App: global.App,
-		Session: session,
+		Session: session,	
+		FlashMessage: flashMessages,	
 	})
 	if err != nil {
 		return err
@@ -70,7 +83,7 @@ func (ctrl BaseController) Render(res http.ResponseWriter, req *http.Request, te
 		}
 	}()
 
-	session, _ := store.Get(req, "session")
+	session, _ := sessionComponent.Store.Get(req, "session")
 
 	// Get path to template or error if it was occured
 	templatePath, err := getTemplatePath(templateView)
@@ -101,16 +114,25 @@ func (ctrl BaseController) Render(res http.ResponseWriter, req *http.Request, te
 			tmpl[templateView].ParseFiles(includeFile)
 		}
 	}
+
+	 flashMessages := func(key interface{}) []interface{} {
+    	if key == nil || key == "" {
+    		key = "_flash"
+    	}
+    	return session.Flashes(fmt.Sprintf("%v",key))
+    }
 	
 
 	tmpl[templateView].ExecuteTemplate(res, "base", struct {
 		Data   interface{}	
 		App  global.GlolbalData	
 		Session *sessions.Session
+		FlashMessage func(key interface{}) []interface{}
 	}{
 		Data:   data,	
 		App: global.App,	
 		Session: session,
+		FlashMessage: flashMessages,
 	})
 
 	if err != nil {

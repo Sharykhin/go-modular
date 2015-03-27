@@ -4,15 +4,12 @@ import "net/http"
 import errorComponent "go-modular/core/components/error"
 import model "go-modular/application/model/todo"
 import "fmt"
-import "github.com/gorilla/sessions"
 //import "go-modular/core/database"
 
 
 type IndexController struct {
 	BaseController
 }
-
-var store = sessions.NewCookieStore([]byte("session-storage"))
 
 func (ctrl *IndexController) IndexAction(res http.ResponseWriter, req *http.Request) error {
 
@@ -22,20 +19,6 @@ func (ctrl *IndexController) IndexAction(res http.ResponseWriter, req *http.Requ
 		return nil
 	}		
 	
-	session, _ := store.Get(req, "session")
-	session.Values["foo"] = "bar"
-    session.Values[42] = 43
-    
-
-    //session.AddFlash("Hello, flash messages world!")
-
-    session.Save(req, res)
-
-    if flashes := session.Flashes(); len(flashes) > 0 {
-        // Just print the flash values.
-        fmt.Println(flashes)
-    }
-
 	todoModel := model.New()	
 	if err:=todoModel.FindById(55); err != nil {
 		return err
@@ -48,6 +31,7 @@ func (ctrl *IndexController) IndexAction(res http.ResponseWriter, req *http.Requ
 	for _,todo := range todoData {
 		fmt.Println(todo["title"])
 	}
+
 	
 	if err := ctrl.RenderView(res,req, "index", []string{"include", "modules/admin:check"}, struct {
 		TestData string

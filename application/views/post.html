@@ -12,10 +12,11 @@
 		{{range $date := .Data.Dates}}
 			<p><i>{{$date}}</i></p>
 		{{end}}
-		<h5>Flash messages</h5>
-		{{$flashes := .Session.Flashes}}
-		{{range $flash := $flashes}}
-			<h5>{{$flash}}</h5>
+				
+		<p>{{.Session.Values.abba}}</p>		
+		<h5>Flash messages2</h5>		
+		{{range $flash := call .FlashMessage ""}}
+			<p>{{$flash}}</p>
 		{{end}}
 	</body>
 </html>

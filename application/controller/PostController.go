@@ -2,7 +2,7 @@ package controller
 
 import "net/http"
 import "fmt"
-
+import sessionComponent "go-modular/core/components/session"
 
 type PostController struct {
 	BaseController
@@ -27,22 +27,18 @@ func (ctrl *PostController) AboutAction(res http.ResponseWriter, req *http.Reque
 
 func (ctrl *PostController) IndexAction(res http.ResponseWriter, req *http.Request) error {
 
-	session, _ := store.Get(req, "session")
-	fmt.Println(session.Values["foo"])
-	fmt.Println(session.Values[42])
-
-
-	if flashes := session.Flashes(); len(flashes) > 0 {
-        // Just print the flash values.
-        fmt.Println(flashes)
-    }
-
+	session, _ := sessionComponent.Store.Get(req, "session")
+	//session.Values["_flash"]=nil
+	delete(session.Values,"_flash")
+	fmt.Println(session.Values["_flash"])
+	fmt.Println(session)
+	
 	if err := ctrl.RenderView(res,req, "post", nil, struct {
 		User  string
-		Dates [2]int
+		Dates [2]int		
 	}{
 		User:  "John",
-		Dates: [2]int{2, 3},
+		Dates: [2]int{2, 3},				
 	}); err != nil {
 		return err
 	}
