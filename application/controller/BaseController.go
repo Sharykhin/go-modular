@@ -15,6 +15,7 @@ type BaseController struct{}
 
 func (ctrl *BaseController) RenderView(res http.ResponseWriter, req *http.Request, templateView string, includes []string, data interface{}) error {
 
+	
 	session, _ := sessionComponent.Store.Get(req, "session")	
 
 	templatePath, err := getTemplatePath(templateView)
@@ -38,17 +39,51 @@ func (ctrl *BaseController) RenderView(res http.ResponseWriter, req *http.Reques
 		}
 	}
 	
+
+    flashMessages := func() func(interface{}) []interface{} {
+    	
+    	var keys []string = []string{"error","notice","success","_flash"}
+    	allMessages := make(map[string][]interface{})
+    	var messages []interface{}
+    	fmt.Println("sadsa",session.Values["er"])
+    	for _,key := range keys {
+    		fmt.Printf("%T %v\n",key,key)
+    		fmt.Printf("%T %v\n",session.Values[fmt.Sprintf("%v",key)],session.Values[fmt.Sprintf("%v",key)])
+    		if session.Values[fmt.Sprintf("%v",key)] != nil {
+				messages = session.Flashes(fmt.Sprintf("%v",key))   
+				delete(session.Values,fmt.Sprintf("%v",key))				
+    		} else {
+    			messages = []interface{}{}
+    		}
+    		allMessages[fmt.Sprintf("%v",key)]=messages
+    	}
+    	//session.Save(req, res)      	   	
+		fmt.Println(allMessages)
+    	return func(key interface{}) []interface{} {
+    		if key == nil || key == "" {
+    			key = "_flash"
+    		}
+    		session.Values["er"]=1
+    		session.Save(req, res)      	
+    		return allMessages[fmt.Sprintf("%v",key)]
+    	}
+
+    }()
+
+   
+/*
     flashMessages := func(key interface{}) []interface{} {
     	if key == nil || key == "" {
-    		key = "_flash"
-    	}
-    	
-    	messages := session.Flashes(fmt.Sprintf("%v",key))
-    	session.Values[fmt.Sprintf("%v",key)]=nil
-    	//delete(session.Values,fmt.Sprintf("%v",key))
-    	session.Save(req, res)
-    	return messages
-    }
+    			key = "_flash"
+		}
+		var messages []interface{}
+		if session.Values[fmt.Sprintf("%v",key)] != nil {
+			messages = session.Flashes(fmt.Sprintf("%v",key))  			
+		} else {
+			messages = []interface{}{}
+		}
+		return messages
+    }*/
 	
 	err = t.Execute(res, struct {
 		Data interface{}
@@ -74,14 +109,6 @@ func (ctrl *BaseController) RenderView(res http.ResponseWriter, req *http.Reques
 
 // Render template with layout
 func (ctrl BaseController) Render(res http.ResponseWriter, req *http.Request, templateView string, includes []string, data interface{}) error {
-
-	defer func() {
-		err := recover()
-		if err != nil {
-			fmt.Fprint(res, err)
-			return
-		}
-	}()
 
 	session, _ := sessionComponent.Store.Get(req, "session")
 

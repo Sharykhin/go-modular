@@ -14,9 +14,13 @@
 		{{end}}
 				
 		<p>{{.Session.Values.abba}}</p>		
-		<h5>Flash messages2</h5>		
+		<h5>Flash messages2 default</h5>		
 		{{range $flash := call .FlashMessage ""}}
 			<p>{{$flash}}</p>
+		{{end}}
+		<h5>Flash messages2 error</h5>		
+		{{range $flash := call .FlashMessage "error"}}
+			<p style="color:#FF0000">{{$flash}}</p>
 		{{end}}
 	</body>
 </html>

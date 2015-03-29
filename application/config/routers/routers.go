@@ -6,11 +6,20 @@ import (
 	userModule "go-modular/application/modules/user/controller"
 	errorComponent "go-modular/core/components/error"
 	"net/http"
+	"fmt"
 )
 
 type appHandler func(http.ResponseWriter, *http.Request) error
 
 func (fn appHandler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+
+	defer func() {
+		err := recover()
+		if err != nil {
+			fmt.Fprint(res, err)
+			return
+		}
+	}()
 
 	if err := fn(res, req); err != nil {
 		errorComponent.ErrorHandler(res, req, http.StatusInternalServerError,err.Error())
