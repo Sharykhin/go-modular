@@ -1,8 +1,6 @@
 package controller
 
 import "net/http"
-//import "fmt"
-//import sessionComponent "go-modular/core/components/session"
 
 type PostController struct {
 	BaseController
@@ -27,21 +25,17 @@ func (ctrl *PostController) AboutAction(res http.ResponseWriter, req *http.Reque
 
 func (ctrl *PostController) IndexAction(res http.ResponseWriter, req *http.Request) error {
 
-	//session, _ := sessionComponent.Store.Get(req, "session")
-	//session.AddFlash("Hello, flash messages world Default key!")
-	//delete(session.Values,"abba")
-	//session.Save(req, res)
-	//session.Values["_flash"]=nil
-	//delete(session.Values,"_flash")
-	//fmt.Println(session.Values["_flash"])
 	
+	defaultFlash := ctrl.GetFlashMessages(res,req,nil)
 	
 	if err := ctrl.RenderView(res,req, "post", nil, struct {
 		User  string
-		Dates [2]int		
+		Dates [2]int
+		FlashMessage []interface{}		
 	}{
 		User:  "John",
-		Dates: [2]int{2, 3},				
+		Dates: [2]int{2, 3},	
+		FlashMessage: 	defaultFlash,	
 	}); err != nil {
 		return err
 	}

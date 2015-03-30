@@ -13,8 +13,7 @@ func (ctrl *DefaultController) IndexAction(res http.ResponseWriter, req *http.Re
 	session, _ := sessionComponent.Store.Get(req, "session")
 
 	session.Values["abba"]="ABBA"
-	//delete(session.Values,"_flash")
-	//session.Values["_flash"]="ASDSa"
+
 	session.AddFlash("Hello, flash messages world Error key!","error")
 	session.AddFlash("Hello, flash messages world Default key!")
 

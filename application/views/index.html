@@ -12,7 +12,9 @@
 		<h1> {{.Data.TestData}}</h1>
 		<h4>{{.Session.Values.foo}}</h4>		
 		<h5>Flash messages</h5>	
-		
+		{{ range $flash := .Data.FlashMessage}}
+			<p style="color:#FF0000">{{$flash}}</p>
+		{{end}}
 				
 		{{ template "ajax" .Data }}
 		{{ template "check" .Data }}

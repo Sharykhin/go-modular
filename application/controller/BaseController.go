@@ -13,6 +13,26 @@ import "fmt"
 
 type BaseController struct{}
 
+// Return slice of flash messages.
+func (ctrl *BaseController) GetFlashMessages(res http.ResponseWriter, req *http.Request,key interface{}) []interface{} {
+
+	session, _ := sessionComponent.Store.Get(req, "session")
+
+	if key == nil || key == "" {
+		key = "_flash"
+	}
+	var messages []interface{}
+	if session.Values[fmt.Sprintf("%v",key)] != nil {
+		messages = session.Flashes(fmt.Sprintf("%v",key))  	
+		delete(session.Values,fmt.Sprintf("%v",key))
+		session.Save(req, res)      		
+	} else {
+		messages = []interface{}{}
+	}
+	return messages
+
+}
+
 func (ctrl *BaseController) RenderView(res http.ResponseWriter, req *http.Request, templateView string, includes []string, data interface{}) error {
 
 	
@@ -37,64 +57,16 @@ func (ctrl *BaseController) RenderView(res http.ResponseWriter, req *http.Reques
 			}
 			t.ParseFiles(includeFile)
 		}
-	}
-	
-
-    flashMessages := func() func(interface{}) []interface{} {
-    	
-    	var keys []string = []string{"error","notice","success","_flash"}
-    	allMessages := make(map[string][]interface{})
-    	var messages []interface{}
-    	fmt.Println("sadsa",session.Values["er"])
-    	for _,key := range keys {
-    		fmt.Printf("%T %v\n",key,key)
-    		fmt.Printf("%T %v\n",session.Values[fmt.Sprintf("%v",key)],session.Values[fmt.Sprintf("%v",key)])
-    		if session.Values[fmt.Sprintf("%v",key)] != nil {
-				messages = session.Flashes(fmt.Sprintf("%v",key))   
-				delete(session.Values,fmt.Sprintf("%v",key))				
-    		} else {
-    			messages = []interface{}{}
-    		}
-    		allMessages[fmt.Sprintf("%v",key)]=messages
-    	}
-    	//session.Save(req, res)      	   	
-		fmt.Println(allMessages)
-    	return func(key interface{}) []interface{} {
-    		if key == nil || key == "" {
-    			key = "_flash"
-    		}
-    		session.Values["er"]=1
-    		session.Save(req, res)      	
-    		return allMessages[fmt.Sprintf("%v",key)]
-    	}
-
-    }()
-
-   
-/*
-    flashMessages := func(key interface{}) []interface{} {
-    	if key == nil || key == "" {
-    			key = "_flash"
-		}
-		var messages []interface{}
-		if session.Values[fmt.Sprintf("%v",key)] != nil {
-			messages = session.Flashes(fmt.Sprintf("%v",key))  			
-		} else {
-			messages = []interface{}{}
-		}
-		return messages
-    }*/
+	}       
 	
 	err = t.Execute(res, struct {
 		Data interface{}
 		App  global.GlolbalData
-		Session *sessions.Session
-		FlashMessage func(key interface{}) []interface{}		
+		Session *sessions.Session		
 	}{
 		Data: data,
 		App: global.App,
-		Session: session,	
-		FlashMessage: flashMessages,	
+		Session: session,			
 	})
 	if err != nil {
 		return err
@@ -140,26 +112,16 @@ func (ctrl BaseController) Render(res http.ResponseWriter, req *http.Request, te
 			}
 			tmpl[templateView].ParseFiles(includeFile)
 		}
-	}
-
-	 flashMessages := func(key interface{}) []interface{} {
-    	if key == nil || key == "" {
-    		key = "_flash"
-    	}
-    	return session.Flashes(fmt.Sprintf("%v",key))
-    }
-	
+	}	
 
 	tmpl[templateView].ExecuteTemplate(res, "base", struct {
 		Data   interface{}	
 		App  global.GlolbalData	
-		Session *sessions.Session
-		FlashMessage func(key interface{}) []interface{}
+		Session *sessions.Session		
 	}{
 		Data:   data,	
 		App: global.App,	
-		Session: session,
-		FlashMessage: flashMessages,
+		Session: session,		
 	})
 
 	if err != nil {

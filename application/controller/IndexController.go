@@ -32,13 +32,16 @@ func (ctrl *IndexController) IndexAction(res http.ResponseWriter, req *http.Requ
 		fmt.Println(todo["title"])
 	}
 
+	flashErrorMessages := ctrl.GetFlashMessages(res,req,"error")
 	
 	if err := ctrl.RenderView(res,req, "index", []string{"include", "modules/admin:check"}, struct {
 		TestData string
 		N        int
+		FlashMessage []interface{}
 	}{
 		TestData: "Test string",
 		N:        123,
+		FlashMessage: flashErrorMessages,
 	}); err != nil {
 		return err
 	}
