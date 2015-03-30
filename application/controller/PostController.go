@@ -10,13 +10,11 @@ func (ctrl *PostController) AboutAction(res http.ResponseWriter, req *http.Reque
 	if err := ctrl.Render(res, req, "other", []string{"include"}, struct {
 		Numbers [5]int
 		Article string
-		Data    int
-		N int
+		Data    int	
 	}{
 		Numbers: [5]int{1, 14, 44, 15, 29},
 		Article: "Make a join",
-		Data:    15,
-		N: 188,
+		Data:    15,		
 	}); err != nil {
 		return err
 	}

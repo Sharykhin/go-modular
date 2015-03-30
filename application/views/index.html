@@ -9,8 +9,9 @@
 			<li><a href="/posts">Posts</a></li>
 			<li><a href="/">Index</a></li>
 		</uL>
-		<h1> {{.Data.TestData}}</h1>
-		<h4>{{.Session.Values.foo}}</h4>		
+		<p>Value of testData("TestData"): </p>
+		<h1>{{.Data.TestData}}</h1>
+		<h4>Session value of key "foo" is: {{ if .Session.Values.foo }} {{.Session.Values.foo}} {{else}} none {{end}}</h4>		
 		<h5>Flash messages</h5>	
 		{{ range $flash := .Data.FlashMessage}}
 			<p style="color:#FF0000">{{$flash}}</p>
