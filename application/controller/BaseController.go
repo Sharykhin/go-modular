@@ -13,6 +13,11 @@ import "fmt"
 
 type BaseController struct{}
 
+
+func (ctrl *BaseController) IncrementMe(i int, n int) int {
+	return i+n
+}
+
 // Return slice of flash messages.
 func (ctrl *BaseController) GetFlashMessages(res http.ResponseWriter, req *http.Request,key interface{}) []interface{} {
 
