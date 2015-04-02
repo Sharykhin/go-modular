@@ -2,8 +2,7 @@ package tests
 
 import (
 		"testing"
-		"go-modular/application/controller"	
-		
+		"go-modular/application/controller"			
 		)
 
 
