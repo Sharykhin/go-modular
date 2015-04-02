@@ -8,7 +8,6 @@ import "strings"
 import global "go-modular/application/config/global"
 import sessionComponent "go-modular/core/components/session"
 import "github.com/gorilla/sessions"
-//import "errors"
 import "fmt"
 
 type BaseController struct{}
