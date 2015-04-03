@@ -39,3 +39,7 @@ Development:
 
 Grunt will restart project in any time, when the go files(*.go) have been changed
 
+Documentation:
+-------------
+
+To read more about go-modular follow the [link](https://github.com/Sharykhin/go-modular/wiki)
