@@ -1,0 +1,27 @@
+{{define "head"}}{{end}}
+{{define "body"}}
+	<h1>Todos</h1>
+		<div class="row">			
+			{{ range $flash := .Data.FlashMessage}}
+				<div class="alert alert-success" role="alert">
+				    {{$flash}}
+		    	</div>
+			{{end}}			
+		</div>		
+		<div class="row">
+			<h2>Welcome {{.Data.AdminName}}</h2>
+			<ul class="list-group">
+				{{ range $todo := .Data.Todos}}
+					<li class="list-group-item">					
+						
+						<a class="btn btn-danger" href="/admin/delete/{{$todo.todoid}}">Delete</a>
+
+						{{$todo.title}}
+					</li>
+				{{end}}
+			</ul>
+		</div>
+
+	
+
+{{end}}

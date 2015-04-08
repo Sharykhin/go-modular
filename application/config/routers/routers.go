@@ -2,14 +2,21 @@ package routers
 
 import (
 	controller "go-modular/application/controller"
-	adminModule "go-modular/application/modules/admin/controller"
-	userModule "go-modular/application/modules/user/controller"
 	errorComponent "go-modular/core/components/error"
 	"net/http"
-	"fmt"
+	"fmt"	
+	auth "github.com/abbot/go-http-auth"
 )
 
 type appHandler func(http.ResponseWriter, *http.Request) error
+
+func Secret(user, realm string) string {
+        if user == "admin" {
+                // password is "hello"
+                return "$1$dlPL2MqE$oQmn16q49SqdmhenQuNgs1"
+        }
+        return ""
+}
 
 func (fn appHandler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
@@ -31,16 +38,17 @@ func (fn appHandler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 func Listen() {
 
 	var indexController controller.IndexController
-	var postController controller.PostController
-	// one more variant of defining controller
-	adminDefaultController := new(adminModule.DefaultController)
-	var userDefaultController userModule.DefaultController
+	var adminController controller.AdminController
 
 	http.Handle("/", appHandler(indexController.IndexAction))
-	http.Handle("/posts", appHandler(postController.IndexAction))
-	http.Handle("/about", appHandler(postController.AboutAction))
-	http.Handle("/admin", appHandler(adminDefaultController.IndexAction))
-	http.Handle("/user", appHandler(userDefaultController.IndexAction))
-	http.Handle("/user/profile", appHandler(userDefaultController.UserProfileAction))	
+	http.Handle("/create",appHandler(indexController.CreateTodoAction))	
+
+	
+	http.Handle("/done/", appHandler(indexController.DoneAction))
+
+    authenticator := auth.NewBasicAuthenticator("localhost", Secret)
+
+    http.HandleFunc("/admin/", auth.JustCheck(authenticator, adminController.IndexAction))
+    http.HandleFunc("/admin/delete/",auth.JustCheck(authenticator, adminController.DeleteAction))
 
 }

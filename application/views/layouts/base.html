@@ -3,10 +3,19 @@
 	  <head>
 	  	<title>GO - MODULAR </title>
 	  	<link rel="stylesheet" type="text/css" href="/public/vendor/base/css/style.css">
+	  	<link rel="stylesheet" type="text/css" href="/public/vendor/bootstrap/dist/css/bootstrap.css">
+	  	<link rel="stylesheet" type="text/css" href="/public/vendor/bootstrap/dist/css/bootstrap-theme.css">
 	  	{{template "head" .}}
 	  </head>
 	  <body>
-	  	{{template "body" .}}
+	  	<div class="row">
+	  		<div class="col-md-2"></div>
+	  		<div class="col-md-8">
+	  			  		{{template "body" .}}
+
+	  		</div>	
+	  		<div class="col-md-2"></div>
+	  	</div>
 	  </body>
 	</html>
 {{end}}

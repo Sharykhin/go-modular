@@ -2,17 +2,15 @@ package main
 
 import (
 	//"fmt"
-	config "go-modular/application/config"
-	routers "go-modular/application/config/routers"
+	"github.com/gorilla/context"
 	"net/http"
 	"path"
+	config "go-modular/application/config"
+	routers "go-modular/application/config/routers"
 	"strings"
-	"github.com/gorilla/context"
-
 )
 
-
-func ServeFileHandler(res http.ResponseWriter, req *http.Request) {	
+func ServeFileHandler(res http.ResponseWriter, req *http.Request) {
 	fname := path.Base(req.URL.Path)
 	http.ServeFile(res, req, "./"+fname)
 }

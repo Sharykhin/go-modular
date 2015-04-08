@@ -86,6 +86,7 @@ func (ctrl *BaseController) RenderView(res http.ResponseWriter, req *http.Reques
 // Render template with layout
 func (ctrl BaseController) Render(res http.ResponseWriter, req *http.Request, templateView string, includes []string, data interface{}) error {
 
+
 	session, _ := sessionComponent.Store.Get(req, "session")
 
 	// Get path to template or error if it was occured
@@ -105,7 +106,8 @@ func (ctrl BaseController) Render(res http.ResponseWriter, req *http.Request, te
 	if err != nil {
 		return err
 	}
-	
+
+		
 	// Include additional templates if it is required
 	if includes != nil {
 		// Go throug all file, and get corrct path
@@ -117,6 +119,7 @@ func (ctrl BaseController) Render(res http.ResponseWriter, req *http.Request, te
 			tmpl[templateView].ParseFiles(includeFile)
 		}
 	}	
+
 
 	tmpl[templateView].ExecuteTemplate(res, "base", struct {
 		Data   interface{}	

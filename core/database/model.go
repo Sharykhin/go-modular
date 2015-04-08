@@ -144,7 +144,7 @@ func (model * Model) FindAll() ([]map[string]interface{}, error) {
 
 // Return data of model from database by using primary key
 func (model *Model) FindById(id int) error {
-	fmt.Println("Find is running...")
+	
 	if model.Schema[model.PrimaryKey] != nil {
 		return errors.New("Your model has already referenced to the row in table: primary key is " + fmt.Sprintf("%v",model.Schema[model.PrimaryKey]))
 	}

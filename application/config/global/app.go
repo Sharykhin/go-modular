@@ -9,6 +9,6 @@ var App GlolbalData
 
 func init() {	
 	App.Properties = map[string]interface{}{
-		 "ApplicationName": "GO-MODULAR",
+		 "ApplicationName": "go-modular",
 		}
 }
