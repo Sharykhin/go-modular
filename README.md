@@ -1,3 +1,14 @@
+Requirements:
+------------
+
+install following packages:
+```sh
+go get github.com/abbot/go-http-auth
+go get github.com/gorilla/sessions
+go get github.com/lib/pq
+go get github.com/go-sql-driver/mysql
+```
+
 Compile a project:
 -----------------
 
